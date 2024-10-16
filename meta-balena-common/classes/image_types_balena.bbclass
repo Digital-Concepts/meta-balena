@@ -116,6 +116,7 @@ BALENA_STATE_SIZE ?= "20480"
 BALENA_IMAGE_ALIGNMENT ?= "4096"
 IMAGE_ROOTFS_ALIGNMENT = "${BALENA_IMAGE_ALIGNMENT}"
 DEVICE_SPECIFIC_SPACE ?= "${BALENA_IMAGE_ALIGNMENT}"
+DEVICE_SPECIFIC_BOOTFS_OPTS ?= ""
 
 BALENA_BOOT_WORKDIR ?= "${WORKDIR}/${BALENA_BOOT_FS_LABEL}"
 
@@ -301,6 +302,7 @@ IMAGE_CMD:balenaos-img () {
     if [ "${BALENA_BOOT_FAT32}" = "1" ]; then
         OPTS="$OPTS -F 32"
     fi
+    OPTS="$OPTS ${DEVICE_SPECIFIC_BOOTFS_OPTS}"
     eval mkfs.vfat "$OPTS" "${BALENA_BOOT_FS}" "${BALENA_BOOT_BLOCKS}"
     if [ "$(ls -A ${BALENA_BOOT_WORKDIR})" ]; then
         mcopy -i ${BALENA_BOOT_FS} -svm ${BALENA_BOOT_WORKDIR}/* ::
@@ -384,8 +386,8 @@ do_rootfs[vardeps] += "BALENA_BOOT_PARTITION_FILES"
 
 # XXX(petrosagg): This should be eventually implemented using a docker-native daemon
 IMAGE_CMD:docker () {
-    DOCKER_IMAGE=$(${IMAGE_CMD_TAR} -cv -C ${IMAGE_ROOTFS} . | DOCKER_API_VERSION=1.22 docker import -)
-    DOCKER_API_VERSION=1.22 docker save ${DOCKER_IMAGE} > ${BALENA_DOCKER_IMG}
+    DOCKER_IMAGE=$(${IMAGE_CMD_TAR} -cv -C ${IMAGE_ROOTFS} . | DOCKER_API_VERSION=${BALENA_API_VERSION} docker import -)
+    DOCKER_API_VERSION=${BALENA_API_VERSION} docker save ${DOCKER_IMAGE} > ${BALENA_DOCKER_IMG}
 }
 
 IMAGE_TYPEDEP:hostapp-ext4 = "docker"

@@ -314,8 +314,6 @@ module.exports = {
 			),
 		});
 
-		console.log(this.suite.options)
-
 		// Network definitions
 		// If suites config.js has networkWired: true, override the device contract
 		if (this.suite.options.balenaOS.network.wired === true) {
@@ -327,7 +325,7 @@ module.exports = {
 			this.suite.options.balenaOS.network.wired = {
 				nat: true,
 			};
-		} 
+		}
 		else {
 			// device has wifi, use wifi hotspot to connect to DUT
 			delete this.suite.options.balenaOS.network.wired;
@@ -347,7 +345,7 @@ module.exports = {
 				psk: `${this.suite.options.id}_psk`,
 				nat: true,
 			};
-		} 
+		}
 		else {
 			// no wifi on DUT
 			delete this.suite.options.balenaOS.network.wireless;
@@ -361,7 +359,16 @@ module.exports = {
 			},
 		});
 
-		// Downloads the balenaOS image we hup from
+		// Authenticating balenaSDK
+		// Required for downloading private device type images from balenaCloud
+		// the token is locally stored so a subsequent login with fetchOs will work, despite being a different sdk instance
+		await this.context
+		.get()
+		.sdk.balena.auth.loginWithToken(this.suite.options.balena.apiKey);
+		this.log(`Logged in with ${await this.context.get().sdk.balena.auth.whoami()}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
+
+
+		// Downloads the balenaOS image we hup from		
 		// It can't accept invalid deviceType because we check contracts already in the start
 		// If there are no releases found for a deviceType then skip the HUP suite
 		if (((await this.sdk.balena.models.os.getAvailableOsVersions(this.suite.deviceType.slug)).length) === 0) {
@@ -378,13 +385,7 @@ module.exports = {
 		);
 
 		const keys = await this.utils.createSSHKey(this.sshKeyPath);
-		
-		// Authenticating balenaSDK
-    await this.context
-    .get()
-    .sdk.balena.auth.loginWithToken(this.suite.options.balena.apiKey);
-    this.log(`Logged in with ${await this.context.get().sdk.balena.auth.whoami()}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
-		
+
 		await this.sdk.balena.models.key.create(
 			this.sshKeyLabel,
 			keys.pubKey
@@ -417,7 +418,6 @@ module.exports = {
 						persistentLogging: true,
 						// Set local mode so we can perform local pushes of containers to the DUT
 						localMode: true,
-						apiEndpoint: 'https://api.balena-cloud.com',
 						developmentMode: true,
 						installer: {
 							secureboot: ['1', 'true'].includes(process.env.FLASHER_SECUREBOOT),

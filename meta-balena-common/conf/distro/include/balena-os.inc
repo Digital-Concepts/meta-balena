@@ -5,7 +5,7 @@ include conf/distro/include/balena-os-rust-version.inc
 
 DISTRO = "balena-os"
 DISTRO_NAME = "balenaOS"
-DISTRO_VERSION = "6.0.0"
+DISTRO_VERSION = "6.0.44"
 HOSTOS_VERSION = "${DISTRO_VERSION}"
 python () {
     ''' Set HOSTOS_VERSION from board VERSION if available '''
@@ -147,3 +147,6 @@ BALENA_SIGN_LABEL ?= "${@bb.utils.contains('MACHINE_FEATURES', 'efi', 'balena-ef
 BALENA_NONENC_BOOT_LABEL ?= "${@oe.utils.conditional('SIGN_API','','${BALENA_BOOT_LABEL}','${BALENA_SIGN_LABEL}',d)}"
 BALENA_NONENC_BOOT_MOUNT ?= "/mnt/${@'${BALENA_NONENC_BOOT_LABEL}'.replace('balena-','')}"
 
+# This is the docker API version for v20.10
+# balena version --format '{{.Server.APIVersion}}'
+BALENA_API_VERSION ?= "1.41"
