@@ -8,7 +8,7 @@ REQUIRED_DISTRO_FEATURES += " systemd"
 
 BALENA_FLAG_FILE = "${BALENA_FLASHER_FLAG_FILE}"
 
-IMAGE_FSTYPES = "balenaos-img"
+IMAGE_FSTYPES = "${@oe.utils.conditional('SIGN_API','','balenaos-img','balenaos-img.sig',d)}"
 
 BALENA_ROOT_FSTYPE = "ext4"
 
@@ -61,6 +61,9 @@ BALENA_BOOT_PARTITION_FILES:append = " ${BALENA_COREBASE}/../../../${MACHINE}.js
 add_resin_image_to_flasher_rootfs() {
     mkdir -p ${WORKDIR}/rootfs/opt
     cp ${DEPLOY_DIR_IMAGE}/balena-image-${MACHINE}.balenaos-img ${WORKDIR}/rootfs/opt
+    if [ -n "${SIGN_API}" ]; then
+        cp "${DEPLOY_DIR_IMAGE}/balena-image-${MACHINE}.balenaos-img.sig" "${WORKDIR}/rootfs/opt/"
+    fi
 }
 
 IMAGE_PREPROCESS_COMMAND += " add_resin_image_to_flasher_rootfs; "

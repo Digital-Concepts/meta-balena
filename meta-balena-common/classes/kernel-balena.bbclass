@@ -130,6 +130,7 @@ BALENA_CONFIGS ?= " \
     mbim \
     qmi \
     misc \
+    panic \
     redsocks \
     reduce-size \
     security \
@@ -237,6 +238,7 @@ KERNEL_ZSTD = "${@configure_from_version("5.9", "kernel_zstd", "", d)}"
 BALENA_CONFIGS:append = "${@bb.utils.contains('MACHINE_FEATURES','efi'," ${KERNEL_ZSTD}",'',d)}"
 BALENA_CONFIGS[kernel_zstd] = " \
     CONFIG_KERNEL_ZSTD=y \
+    CONFIG_CRYPTO_ZSTD=y \
 "
 
 BALENA_CONFIGS[aufs] = " \
@@ -499,7 +501,6 @@ BALENA_CONFIGS[qmi] = " \
 # various other configurations
 BALENA_CONFIGS[misc] = " \
     CONFIG_USB_SERIAL_CP210X=m \
-    CONFIG_PANIC_TIMEOUT=1 \
     CONFIG_DEBUG_FS=y \
     "
 
@@ -509,6 +510,12 @@ BALENA_CONFIGS_DEPS[misc] = " \
     CONFIG_IP_NF_TARGET_LOG=m \
     CONFIG_NETFILTER_XT_TARGET_LOG=m \
     CONFIG_NF_NAT_REDIRECT=m \
+"
+
+# Reset on oops
+BALENA_CONFIGS[panic] = " \
+    CONFIG_PANIC_ON_OOPS=y \
+    CONFIG_PANIC_TIMEOUT=1 \
 "
 
 # configs needed for our usage of redsocks
@@ -830,6 +837,7 @@ def aufs_kernel_select(kernelversion):
         ('5.15.5','c2ce6a805f301e939724e9a48e523c7298b797e6'),
         ('5.15.36','8c2481e91182fc6959cb3ad56858c66d7a0c97fd'),
         ('5.15.41','5e018961ad499fc74e750ae857c33fbfc7641cfd'),
+        ('6.1','bfd38ec481836d86de5686dadca02e072b4f0584'),
     ])
 
 
@@ -938,8 +946,8 @@ python do_kernel_resin_aufs_fetch_and_unpack() {
         srcuri = "git://git.code.sf.net/p/aufs/aufs3-standalone.git;protocol=https;branch=aufs%s;name=aufs;destsuffix=aufs_standalone" % aufsbranch
     elif kernelversion.split('.')[0] is '4':
         srcuri = "git://github.com/sfjro/aufs4-standalone.git;protocol=https;branch=aufs%s;name=aufs;destsuffix=aufs_standalone" % aufsbranch
-    elif kernelversion.split('.')[0] is '5':
-        srcuri = "git://github.com/sfjro/aufs5-standalone.git;protocol=https;branch=aufs%s;name=aufs;destsuffix=aufs_standalone" % aufsbranch
+    elif kernelversion.split('.')[0] is '5' or kernelversion.split('.')[0] is '6':
+        srcuri = "git://github.com/sfjro/aufs-standalone.git;protocol=https;branch=aufs%s;name=aufs;destsuffix=aufs_standalone" % aufsbranch
 
     d.setVar('SRCREV_aufs', aufscommit)
     aufsgit = Git()
@@ -1125,7 +1133,12 @@ do_sign_gpg:append () {
 
 # Parallel builds sharing state cache will mismatch singed kernel and modules
 # Avoid using cache for signed kernel modules to avoid this
-do_compile_kernelmodules[nostamp] = "${@oe.utils.conditional('SIGN_API','','','1',d)}"
+# Also, avoid having the kernel modules rebuilt even if they
+# are not signed - see https://lists.openembedded.org/g/bitbake-devel/message/12359
+python __anonymous() {
+    if d.getVar('SIGN_API'):
+        d.setVarFlag('do_compile_kernelmodules', 'nostamp', '1')
+}
 
 do_deploy:prepend () {
     SIGNING_ARTIFACTS="${SIGNING_ARTIFACTS_BASE}"

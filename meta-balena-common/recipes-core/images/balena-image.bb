@@ -16,7 +16,7 @@ IMAGE_OVERHEAD_FACTOR = "1.0"
 IMAGE_ROOTFS_EXTRA_SPACE = "0"
 IMAGE_ROOTFS_MAXSIZE = "${IMAGE_ROOTFS_SIZE}"
 
-IMAGE_FSTYPES = "balenaos-img"
+IMAGE_FSTYPES = "${@oe.utils.conditional('SIGN_API','','balenaos-img','balenaos-img.sig',d)}"
 
 inherit core-image image-balena features_check
 
@@ -96,3 +96,5 @@ BALENA_BOOT_PARTITION_FILES:append = " ${BALENA_IMAGE_FLAG_FILE}:/${BALENA_IMAGE
 
 addtask image_size_check after do_image_balenaos_img before do_image_complete
 do_resin_boot_dirgen_and_deploy[depends] += "redsocks:do_deploy"
+
+SIGNING_ARTIFACTS = "${BALENA_RAW_IMG}"
