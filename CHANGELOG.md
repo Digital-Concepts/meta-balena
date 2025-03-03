@@ -1,6 +1,87 @@
 Change log
 -----------
 
+# v6.4.1
+## (2025-02-28)
+
+* tests/device-tree: Rework test to not use the sysfs gpio interface [Florin Sarbu]
+
+# v6.4.0
+## (2025-02-27)
+
+* hup: hooks: silence tpm2_flushcontext trap while updating policy [Joseph Kogut]
+* hup: hooks: update passphrase in TPM NVRAM [Joseph Kogut]
+* os-helpers-tpm2: lowercase vars in print_pcr_val_bin [Joseph Kogut]
+* hup: signed-update: store passphrase in TPM [Joseph Kogut]
+* hostapp-update-hooks: use generate_pcr_digests [Joseph Kogut]
+* balena-init-flasher-tpm: use generate_pcr_digests [Joseph Kogut]
+* balena-init-flasher-tpm: write LUKS passphrase to TPM nvram [Joseph Kogut]
+* os-helpers-tpm2: add generate_pcr_digests [Joseph Kogut]
+* os-helpers-tpm2: add tpm_nvram_store_passphrase [Joseph Kogut]
+* os-helpers-tpm2: add size param to hw_gen_passphrase [Joseph Kogut]
+* cryptsetup-efi-tpm: retrieve passphrase from TPM [Joseph Kogut]
+* os-helpers-tpm2: add tpm_nvram_retrieve_passphrase [Joseph Kogut]
+
+# v6.3.23
+## (2025-02-25)
+
+* modemmanager: patch for Cinterion port types [Kirill Zabelin]
+
+# v6.3.22
+## (2025-02-24)
+
+* kernel-devsrc.bb: Use recipe from Poky for 6.12+ kernels [Florin Sarbu]
+
+# v6.3.21
+## (2025-02-21)
+
+* kernel-balena.bbclass: Add aufs patches for 6.12 kernels [Florin Sarbu]
+
+# v6.3.20
+## (2025-02-18)
+
+* resin-mounts: only run non-encrypted mount if partition exists [Alex Gonzalez]
+
+# v6.3.19
+## (2025-02-13)
+
+* wpa-supplicant: Update to recipe from Kirkstone [Florin Sarbu]
+
+# v6.3.18
+## (2025-02-07)
+
+* Update actions/setup-python digest to 4237552 [balena-renovate[bot]]
+
+# v6.3.17
+## (2025-02-07)
+
+
+<details>
+<summary> Update tests/leviathan digest to ae96a7e [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.31.89
+> ### (2025-02-06)
+> 
+> * Update balena-os/leviathan-worker to v2.9.57 [balena-renovate[bot]]
+> 
+> ## leviathan-2.31.88
+> ### (2025-02-06)
+> 
+> * Fix running tests over local worker IP [Ryan Cooke]
+> 
+
+</details>
+
+# v6.3.16
+## (2025-02-06)
+
+* tests: os: swap: increase wiggle room in swap check [Ryan Cooke]
+
+# v6.3.15
+## (2025-02-06)
+
+* tests: cloud: env vars: restart supervisor to speed up tests [Ryan Cooke]
+
 # v6.3.14
 ## (2025-02-05)
 
