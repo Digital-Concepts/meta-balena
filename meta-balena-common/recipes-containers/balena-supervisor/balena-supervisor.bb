@@ -64,8 +64,8 @@ do_compile[noexec] = "1"
 do_install[network] = "1"
 do_install () {
 	# Use custom supervisor image
-	SUPERVISOR_IMAGE=dcnext/balena-supervisor:16.10.3
-
+	SUPERVISOR_IMAGE=dcnext/balena-supervisor:$SUPERVISOR_VERSION
+	#SUPERVISOR_IMAGE=dcnext/balena-supervisor-rpi3:$SUPERVISOR_VERSION
 	# Generate supervisor conf
 	install -d ${D}${sysconfdir}/balena-supervisor/
 	install -m 0755 ${WORKDIR}/supervisor.conf ${D}${sysconfdir}/balena-supervisor/
