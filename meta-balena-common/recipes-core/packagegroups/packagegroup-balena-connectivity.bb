@@ -22,7 +22,6 @@ CONNECTIVITY_FIRMWARES ?= " \
 
 CONNECTIVITY_PACKAGES = " \
     ${NETWORK_MANAGER_PACKAGES} \
-    avahi-daemon \
     balena-net-connectivity-wait \
     dnsmasq \
     dropbear \

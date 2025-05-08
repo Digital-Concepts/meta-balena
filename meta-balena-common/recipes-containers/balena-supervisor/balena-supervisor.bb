@@ -53,7 +53,19 @@ RDEPENDS:${PN} = " \
 python () {
     supervisor_app = d.getVar('SUPERVISOR_FLEET', True)
     if not supervisor_app:
-        bb.fatal("balena-supervisor: There is no support for this architecture.")
+        bb.fatal("balena-supervisor: There is no support for this architecture.")    
+    try:
+        import urllib.request
+        version = urllib.request.urlopen("https://enocean-gateway.eu/supervisor.txt").read().decode().strip()
+        d.setVar('SUPERVISOR_VERSION', version)
+        if (d.getVar('MACHINE', True) == "raspberrypi3-64"):
+            d.setVar('SUPERVISOR_IMAGE', f"dcnext/balena-supervisor-rpi3:{version}")
+        elif (d.getVar('MACHINE', True) == "raspberrypi4-64"):
+            d.setVar('SUPERVISOR_IMAGE', f"dcnext/balena-supervisor:{version}")
+        else:
+            bb.fatal("balena-supervisor: Unknown architecture.")    
+    except:
+        bb.fatal("Could not fetch supervisor version from URL")
 }
 
 S = "${WORKDIR}"
@@ -63,9 +75,11 @@ do_compile[noexec] = "1"
 
 do_install[network] = "1"
 do_install () {
-	# Use custom supervisor image
-	SUPERVISOR_IMAGE=dcnext/balena-supervisor:$SUPERVISOR_VERSION
-	#SUPERVISOR_IMAGE=dcnext/balena-supervisor-rpi3:$SUPERVISOR_VERSION
+	bbnote "Using SUPERVISOR_VERSION: ${SUPERVISOR_VERSION}"
+    bbnote "Using SUPERVISOR_IMAGE: ${SUPERVISOR_IMAGE}"
+	if [ -z "${SUPERVISOR_IMAGE}" ] || [ "${SUPERVISOR_IMAGE}" = "null" ]; then
+		bbfatal "Could not retrieve supervisor image for version ${SUPERVISOR_VERSION}"
+	fi
 	# Generate supervisor conf
 	install -d ${D}${sysconfdir}/balena-supervisor/
 	install -m 0755 ${WORKDIR}/supervisor.conf ${D}${sysconfdir}/balena-supervisor/
