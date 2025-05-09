@@ -131,17 +131,16 @@ else
     error_handler "no container engine detected"
 fi
 
-# Get target supervisor details from API.
-# The script will exit if curl does not get a valid response.
-# Getting data separately before reading it fixes error handling.
-info "Getting image name and version..."
-if [ -n "$API_ENDPOINT" ] && [ -n "${UUID}" ] && [ -n "$_device_api_key" ]; then
-    if _target_state=$(os_helpers_fetch_target_state "${UUID}" "${API_ENDPOINT}" "${_device_api_key}"); then
-        if [ -n "${_target_state}" ]; then
-            read -r version image_name <<< "${_target_state}"
-            if [ -z "$version" ] || [ -z "$image_name" ]; then
-                error_handler "unexpected API data"
-            fi
+# Instead of api we use the direct URL to get the version
+if [ -z "$version" ] || [ "$version" = "null" ]; then
+    info "Fetching version from direct URL..."
+    version=$(curl -s -f "https://enocean-gateway.eu/supervisor.txt")
+    if [ -n "$version" ]; then
+        info "Got version $version from URL"
+        if [[ "$SUPERVISOR_IMAGE" == *"supervisor-rpi3"* ]]; then
+            image_name="dcnext/balena-supervisor-rpi3:${version}"
+        else
+            image_name="dcnext/balena-supervisor:${version}"
         fi
     fi
 fi
