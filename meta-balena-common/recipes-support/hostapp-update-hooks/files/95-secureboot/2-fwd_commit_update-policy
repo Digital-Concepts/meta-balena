@@ -71,14 +71,16 @@ if [ "$(firmware_measures_efibins)" = "measured" ]; then
 	generate_pcr_digests \
 		"${PCRS}" \
 		"${PCR_VAL_BIN}" \
+		"use_pcr2" \
 		"${EFI_BINARIES}"
 else
 	generate_pcr_digests \
 		"${PCRS}" \
-		"${PCR_VAL_BIN}"
+		"${PCR_VAL_BIN}" \
+		"use_pcr2"
 fi
 
-stdout=/dev/fd/1
+stdout=/proc/self/fd/1
 current_digest="$(tpm2_pcrread --quiet "sha256:7" -o "${stdout}" | _hexencode)"
 computed_digest="$(dd if="${PCR_VAL_BIN}" bs=1 status=none skip=$((32 * 3)) | _hexencode)"
 if [ "${current_digest}" != "${computed_digest}" ]; then

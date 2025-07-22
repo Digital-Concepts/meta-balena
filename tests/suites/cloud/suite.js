@@ -275,7 +275,7 @@ module.exports = {
     await this.context
     .get()
     .cloud.balena.auth.loginWithToken(this.suite.options.balena.apiKey);
-    this.log(`Logged in with ${await this.context.get().cloud.balena.auth.whoami()}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
+    this.log(`Logged in with ${await (this.context.get().cloud.balena.auth.whoami()).username}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
 
     // create a balena application
     this.log("Creating application in cloud...");
@@ -389,7 +389,8 @@ module.exports = {
     config.developmentMode = true;
     config.installer = {
       secureboot: ['1', 'true'].includes(process.env.FLASHER_SECUREBOOT),
-      migrate: { force: this.suite.options.balenaOS.config.installerForceMigration }
+      migrate: { force: this.suite.options.balenaOS.config.installerForceMigration },
+      whitelist_pcr2: true
     };
 
     // Add config to suite context so accessible within tests. Main use case is to check secureboot status
@@ -461,8 +462,10 @@ module.exports = {
 
     // disable port forwarding on the testbot - disables the DUT internet access. We do this after flashing is completed
     // in case the flashing requires internet access - e.g jetson-flash container build
+    // We disable it to test that preloaded apps start without internet access
+    // If this is for a secureboot enabled device, don't disable port forwarding, as we aren't running the preload test anyway
     if (
-			this.workerContract.workerType !== `qemu`
+			this.workerContract.workerType !== `qemu` && !config.installer.secureboot
 		){
       await this.worker.executeCommandInWorker('sh -c "echo 0 > /proc/sys/net/ipv4/ip_forward"');
       this.suite.teardown.register(async () => {

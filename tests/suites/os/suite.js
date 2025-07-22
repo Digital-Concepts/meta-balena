@@ -317,7 +317,8 @@ module.exports = {
 						installer: {
 							secureboot: ['1', 'true'].includes(process.env.FLASHER_SECUREBOOT),
 							// Note that QEMU needs to be configured with no internal storage
-							migrate: { force: this.suite.options.balenaOS.config.installerForceMigration }
+							migrate: { force: this.suite.options.balenaOS.config.installerForceMigration },
+							whitelist_pcr2: true
 						},
 					},
 				},
@@ -362,7 +363,9 @@ module.exports = {
 			await this.context
 			.get()
 			.cloud.balena.auth.loginWithToken(this.suite.options.balena.apiKey);
-			this.log(`Logged in with ${await this.context.get().cloud.balena.auth.whoami()}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
+			this.log(`Logged in with ${await (this.context.get().cloud.balena.auth.whoami()).username}'s account on ${this.suite.options.balena.apiUrl} using balenaSDK`);
+
+			console.log(await (this.context.get().cloud.balena.auth.whoami()))
 
 			await this.cloud.balena.models.key.create(
 				this.sshKeyLabel,
@@ -466,6 +469,7 @@ module.exports = {
 		'./tests/engine-socket',
 		'./tests/engine-healthcheck',
 		'./tests/under-voltage',
+		'./tests/regulatory-db',
 		'./tests/udev',
 		'./tests/device-tree',
 		'./tests/purge-data',
