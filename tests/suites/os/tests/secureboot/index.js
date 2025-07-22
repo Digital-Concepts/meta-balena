@@ -16,13 +16,14 @@ const retry = (fn, delay_ms=250, retries=10 * 4, err) => (
 );
 
 class secureBoot {
-	constructor(test, worker, suite, imagePath, module = {"name": "", "headersVersion": ""}) {
+	constructor(test, worker, suite, imagePath, kernelHeadersPath,  module = {"name": "", "headersVersion": ""}) {
 		this.test = test;
 		this.worker = worker;
 		this.suite = suite;
 		this.workerType = suite.context.get().workerContract.workerType;
 		this.link = suite.context.get().link;
 		this.imagePath = imagePath;
+		this.kernelHeadersPath = kernelHeadersPath;
 		this.sshKeyPath = suite.context.get().sshKeyPath;
 		this.utils = suite.context.get().utils;
 		this.module = module;
@@ -115,11 +116,25 @@ class secureBoot {
 
 		if (this.module.headersVersion.length != 0) {
 			const srcDir = `${__dirname}/kernel-module-build/`
-			await fse.copy(srcDir, this.tmpDir);
-			let data = await fse.readFile(`${this.tmpDir}/docker-compose.yml`, 'utf-8')
-			const result = data.replace(/OS_VERSION:\s*\S+/, `OS_VERSION: ${this.module.headersVersion}`);
-			await fse.writeFile( `${this.tmpDir}/docker-compose.yml`, result, 'utf-8')
-			this.test.comment(`Using kernel headers version ${this.module.headersVersion}`)
+			const headersArchivePath = this.kernelHeadersPath;
+
+			try {
+				const exists = await fse.pathExists(headersArchivePath);
+				await fse.copy(srcDir, this.tmpDir);
+				if (exists) {
+					await fse.copy(headersArchivePath, `${this.tmpDir}/module/${path.basename(headersArchivePath)}`);
+					this.test.comment('Using provided kernel headers');
+				} else {
+					const dockerComposePath = `${this.tmpDir}/docker-compose.yml`;
+					const data = await fse.readFile(dockerComposePath, 'utf-8');
+					const updatedData = data.replace(/OS_VERSION:\s*\S+/, `OS_VERSION: ${this.module.headersVersion}`);
+					await fse.writeFile(dockerComposePath, updatedData, 'utf-8');
+					this.test.comment(`Using kernel headers version ${this.module.headersVersion}`);
+				}
+			} catch (err) {
+				console.error(err);
+				return;
+			}
 		}
 
 		await this.worker.pushContainerToDUT(
@@ -460,6 +475,18 @@ class imxSecureBoot extends secureBoot {
 			}
 
 			await this.replaceBinaryPattern(args.path, args.pattern, args.replacement);
+			if ( args.name == 'Bootloader' ) {
+				// Program the bootloader
+				await this.worker.executeCommandInHostOS(
+					[
+						'tmpdir=$(mktemp -d)', ';',
+						'cp /etc/hostapp-update-hooks.d/99-flash-bootloader ${tmpdir}', ';',
+						'sed -i "s,resin-boot,mnt/imx,g" ${tmpdir}/99-flash-bootloader', ';',
+						'${tmpdir}/99-flash-bootloader', ';'
+					],
+					this.link
+				)
+			}
 			await this.worker.executeCommandInHostOS('reboot', this.link)
 			await this.test.resolves(
 				this.waitForFailedBoot(),
@@ -538,6 +565,7 @@ module.exports = {
 					this.worker,
 					this.suite,
 					this.os.image.path,
+					this.os.kernelHeaders,
 					{ name: "pcan_netdev", headersVersion: "2.108.27" },
 				));
 				return impl.run(test);
@@ -549,6 +577,7 @@ module.exports = {
 				const impl = new testSecureBoot(new uefiSecureBoot(test,
 					this.worker,
 					this.suite, this.os.image.path,
+					this.os.kernelHeaders,
 					{"name": "pcan_netdev", "headersVersion": "2.108.27"}));
 				await impl.run(test);
 			},
@@ -559,6 +588,7 @@ module.exports = {
 				const impl = new testSecureBoot(new rpiSecureBoot(test,
 					this.worker,
 					this.suite, this.os.image.path,
+					this.os.kernelHeaders,
 					{"name": "", "headersVersion": "4.0.16"}));
 				await impl.run(test);
 			},
@@ -569,7 +599,8 @@ module.exports = {
 				const impl = new testSecureBoot(new imxSecureBoot(test,
 					this.worker,
 					this.suite, this.os.image.path,
-					{"name": "", "headersVersion": "6.0.49"}));
+					this.os.kernelHeaders,
+					{"name": "", "headersVersion": "6.5.2"}));
 				await impl.run(test);
 			},
 		},

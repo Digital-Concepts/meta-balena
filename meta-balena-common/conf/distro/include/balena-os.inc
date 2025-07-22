@@ -5,7 +5,7 @@ include conf/distro/include/balena-os-rust-version.inc
 
 DISTRO = "balena-os"
 DISTRO_NAME = "balenaOS"
-DISTRO_VERSION = "6.4.1"
+DISTRO_VERSION = "6.5.44"
 HOSTOS_VERSION = "${DISTRO_VERSION}"
 python () {
     ''' Set HOSTOS_VERSION from board VERSION if available '''
@@ -92,6 +92,7 @@ INITRAMFS_IMAGE = "balena-image-initramfs"
 INITRAMFS_IMAGE_BUNDLE = "1"
 KERNEL_INITRAMFS = "-initramfs"
 INITRAMFS_TASK = ""
+IMAGE_NAME_SUFFIX = ""
 
 # resinOS defaults to ipk packages
 PACKAGE_CLASSES ?= "package_ipk"

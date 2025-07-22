@@ -153,6 +153,7 @@ BALENA_CONFIGS ?= " \
     ${FIRMWARE_COMPRESS} \
     ${MODULE_COMPRESS} \
     ${WIREGUARD} \
+    vlan \
     "
 
 #
@@ -224,8 +225,12 @@ BALENA_CONFIGS[firmware_compress] = " \
     CONFIG_FW_LOADER_COMPRESS=y \
 "
 
+BALENA_CONFIGS:append = " ${@configure_from_version("5.6", "", " mptcp", d)}"
+BALENA_CONFIGS[mptcp] = "CONFIG_MPTCP=y"
+
 MODULE_COMPRESS = "${@configure_from_version("5.13", "module_compress", "", d)}"
 BALENA_CONFIGS[module_compress] = " \
+    CONFIG_MODULE_COMPRESS=y \
     CONFIG_MODULE_COMPRESS_ZSTD=y \
 "
 
@@ -393,6 +398,7 @@ BALENA_CONFIGS[compress-kmodules] ?= " \
 #
 BALENA_CONFIGS[no-debug-info] ?= " \
     CONFIG_DEBUG_INFO=n \
+    CONFIG_DEBUG_INFO_NONE=y \
     "
 
 #
@@ -554,8 +560,11 @@ BALENA_CONFIGS[zram] = " \
     CONFIG_CRYPTO_LZ4=y \
     "
 
-BALENA_CONFIGS:append = " ${@configure_from_version("6.12", " zram_backend_lz4", "", d)}"
-BALENA_CONFIGS[zram_backend_lz4] = "CONFIG_ZRAM_BACKEND_LZ4=y"
+BALENA_CONFIGS:append = " ${@configure_from_version("6.12", " zram_backends", "", d)}"
+BALENA_CONFIGS[zram_backends] = " \
+    CONFIG_ZRAM_BACKEND_LZ4=y \
+    CONFIG_ZRAM_BACKEND_ZSTD=y \
+"
 
 # Kernel versions between 4.0 and 4.9
 # need this for lz4 support
@@ -726,6 +735,16 @@ BALENA_CONFIGS[efi-secureboot] = " \
 "
 BALENA_CONFIGS:append = "${@bb.utils.contains('MACHINE_FEATURES','efi',' efi-secureboot','',d)}"
 
+BALENA_CONFIGS:append = " ${@configure_from_version("6.11", " memcg", "", d)}"
+BALENA_CONFIGS[memcg] = " \
+    CONFIG_MEMCG_V1=y \
+"
+
+# 802.1q VLANs are supported by NetworkManager on all device types
+BALENA_CONFIGS[vlan] = " \
+    CONFIG_VLAN_8021Q=y \
+"
+
 ###########
 # HELPERS #
 ###########
@@ -843,6 +862,7 @@ def aufs_kernel_select(kernelversion):
         ('6.1','bfd38ec481836d86de5686dadca02e072b4f0584'),
         ('6.6','1b28ab1ec3a89a9bec859f61f36d7a5e895583d5'),
         ('6.6.63','4b3aaa6e3dfad2e26deef81a6abbec02939e1080'),
+        ('6.6.84','31c39fd578065095faa6789c84a54a6a84f4dfc7'),
         ('6.12','a74fc3a112d90acddafa65a254177d4e523d1f0c'),
     ])
 
@@ -925,7 +945,6 @@ addtask test_aufs_kernel_select after do_fetch before do_patch
 python do_kernel_resin_aufs_fetch_and_unpack() {
 
     import os.path
-    from bb.fetch2.git import Git
 
     balena_storage = d.getVar('BALENA_STORAGE', True)
     bb.note("Kernel will be configured for " + balena_storage + " balena storage driver.")
@@ -956,10 +975,9 @@ python do_kernel_resin_aufs_fetch_and_unpack() {
         srcuri = "git://github.com/sfjro/aufs-standalone.git;protocol=https;branch=aufs%s;name=aufs;destsuffix=aufs_standalone" % aufsbranch
 
     d.setVar('SRCREV_aufs', aufscommit)
-    aufsgit = Git()
-    urldata = bb.fetch.FetchData(srcuri, d)
-    aufsgit.download(urldata, d)
-    aufsgit.unpack(urldata, d.getVar('WORKDIR', True), d)
+    urldata = bb.fetch.Fetch([srcuri], d)
+    urldata.download()
+    urldata.unpack(d.getVar('WORKDIR', True))
 }
 
 # add our task to task queue - we need the kernel version (so we need to have the sources unpacked and patched) in order to know what aufs patches version we fetch and unpack
@@ -971,6 +989,10 @@ apply_aufs_patches () {
     # bail out if it looks like the kernel source tree already has the fs/aufs directory
     if [ -d ${S}/fs/aufs ] || ! ${@bb.utils.contains('BALENA_CONFIGS','aufs','true','false',d)}; then
         exit
+    fi
+    # fix for kernels up to 6.10: fs/aufs/Makefile:3: fs/aufs/magic.mk: No such file or directory
+    if [ `git -C ${WORKDIR}/aufs_standalone branch --show-current` = "aufs6.6.63" ]; then
+        sed -i 's|include ${src}/magic.mk|include ${srctree}/${src}/magic.mk|' ${WORKDIR}/aufs_standalone/fs/aufs/Makefile
     fi
     cp -r ${WORKDIR}/aufs_standalone/Documentation ${WORKDIR}/aufs_standalone/fs ${S}
     cp ${WORKDIR}/aufs_standalone/include/uapi/linux/aufs_type.h ${S}/include/uapi/linux/
