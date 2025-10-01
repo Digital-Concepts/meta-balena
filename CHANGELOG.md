@@ -1,6 +1,487 @@
 Change log
 -----------
 
+# v6.6.9
+## (2025-09-29)
+
+
+<details>
+<summary> Update balena-supervisor to v17.1.2 [balena-renovate[bot]] </summary>
+
+> ## balena-supervisor-17.1.2
+> ### (2025-07-28)
+> 
+> * config/backends/power-fan: Enable configurable power and fan for Forecr DSBOARD ORNX Nano 8GB [Alexandru Costache]
+> 
+> ## balena-supervisor-17.1.1
+> ### (2025-06-09)
+> 
+> * Remove memory healthcheck [Christina Ying Wang]
+> 
+> ## balena-supervisor-17.1.0
+> ### (2025-05-28)
+> 
+> * Support target state apply cancellation [Christina Ying Wang]
+> 
+> ## balena-supervisor-17.0.5
+> ### (2025-05-27)
+> 
+> * Exclude reclaimable slab memory from used memory metric [Ken Bannister]
+> 
+> ## balena-supervisor-17.0.4
+> ### (2025-05-22)
+> 
+> * Remove unsupported fields from contract requirements [Felipe Lalanne]
+> 
+
+</details>
+
+# v6.6.8
+## (2025-09-29)
+
+
+<details>
+<summary> Update tests/leviathan digest to 73d4851 [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.36.44
+> ### (2025-09-29)
+> 
+> * Update balena-os/leviathan-worker to v2.10.8 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.43
+> ### (2025-09-29)
+> 
+> * Update balena-io/balena-cli to v22.4.9 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.42
+> ### (2025-09-29)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.41
+> ### (2025-09-23)
+> 
+> * Update balena-io/balena-cli to v22.4.8 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.40
+> ### (2025-09-23)
+> 
+> * Update balena-os/leviathan-worker to v2.10.7 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.39
+> ### (2025-09-22)
+> 
+> * Update balena-io/balena-cli to v22.4.7 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.38
+> ### (2025-09-22)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.6.7
+## (2025-09-19)
+
+
+<details>
+<summary> Update tests/leviathan digest to d9e2486 [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.36.37
+> ### (2025-09-18)
+> 
+> * Update balena-io/balena-cli to v22.4.6 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.36
+> ### (2025-09-17)
+> 
+> * Update balena-io/balena-cli to v22.4.5 [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.6.6
+## (2025-09-17)
+
+* Condition the start of update-balena-supervisor.service after internet connectivity [Florin Sarbu]
+
+# v6.6.5
+## (2025-09-15)
+
+
+<details>
+<summary> Update tests/leviathan digest to 3e61af4 [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.36.35
+> ### (2025-09-15)
+> 
+> * Update balena-io/balena-cli to v22.4.4 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.34
+> ### (2025-09-15)
+> 
+> * worker: extend total flashing timeout to 25 minutes [Alex Gonzalez]
+> 
+> ## leviathan-2.36.33
+> ### (2025-09-15)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.32
+> ### (2025-09-11)
+> 
+> * Core: worker: remove exponential backoff on flash status check [Ryan Cooke]
+> 
+> ## leviathan-2.36.31
+> ### (2025-09-10)
+> 
+> * Update balena-io/balena-cli to v22.4.3 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.30
+> ### (2025-09-10)
+> 
+> * Update balena-io/balena-cli to v22.4.2 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.29
+> ### (2025-09-08)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.28
+> ### (2025-09-02)
+> 
+> * Update balena-io/balena-cli to v22.4.1 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.27
+> ### (2025-09-02)
+> 
+> * Update balena-io/balena-cli to v22.4.0 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.26
+> ### (2025-09-02)
+> 
+> * Update balena-io/balena-cli to v22.3.4 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.25
+> ### (2025-09-02)
+> 
+> * Update balena-io/balena-cli to v22.3.3 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.24
+> ### (2025-09-02)
+> 
+> * Update balena-io/balena-cli to v22.3.1 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.23
+> ### (2025-09-01)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.22
+> ### (2025-08-29)
+> 
+> * Update balena-io/balena-cli to v22.3.0 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.21
+> ### (2025-08-25)
+> 
+> * Update balena-os/leviathan-worker to v2.10.6 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.20
+> ### (2025-08-25)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.19
+> ### (2025-08-18)
+> 
+> * Update balena-os/leviathan-worker to v2.10.5 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.18
+> ### (2025-08-18)
+> 
+> * Update balena-os/leviathan-worker to v2.10.4 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.17
+> ### (2025-08-18)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.6.4
+## (2025-09-03)
+
+* Fail if IOMMU is disabled on secure boot systems [Michal Toman]
+
+# v6.6.3
+## (2025-08-29)
+
+* recipes-connectivity/libnss-ato: Do not hardcode the homedir for user root [Florin Sarbu]
+
+# v6.6.2
+## (2025-08-26)
+
+* linux-firmware: Ensure Intel AX210 firmware can be installed [Alexandru Costache]
+
+# v6.6.1
+## (2025-08-25)
+
+* Remove the AX102 requirement for secure boot tests [Kyle Harding]
+
+# v6.6.0
+## (2025-08-23)
+
+* minor: remove ssh service from os-config.json [Edwin Joassart]
+
+# v6.5.55
+## (2025-08-22)
+
+* patch: add metadata to improve balena-engine cve tracking [Edwin Joassart]
+
+# v6.5.54
+## (2025-08-21)
+
+* recipes-connectivity/balena-proxy-config: Clean-up redsocks rules by index [Alexandru Costache]
+
+# v6.5.53
+## (2025-08-17)
+
+* recipes-core/packagegroup-resin: Set PACKAGE_ARCH [Alexandru Costache]
+
+# v6.5.52
+## (2025-08-16)
+
+
+<details>
+<summary> Update tests/leviathan digest to f8b1a87 [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.36.16
+> ### (2025-08-11)
+> 
+> * Update actions/checkout action to v5 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.15
+> ### (2025-08-11)
+> 
+> * Update actions/checkout digest to 08eba0b [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.14
+> ### (2025-08-11)
+> 
+> * core/lib: Specify partition index for a TX2 NX based device type [Alexandru]
+> 
+> ## leviathan-2.36.13
+> ### (2025-08-11)
+> 
+> * Update balena-os/leviathan-worker to v2.10.3 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.12
+> ### (2025-08-11)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.11
+> ### (2025-08-11)
+> 
+> * Update balena-os/leviathan-worker to v2.10.2 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.10
+> ### (2025-08-11)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.9
+> ### (2025-08-09)
+> 
+> * Update balena-io/balena-cli to v22.2.4 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.8
+> ### (2025-08-08)
+> 
+> * Update balena-io/balena-cli to v22.2.3 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.7
+> ### (2025-08-07)
+> 
+> * Update balena-os/leviathan-worker to v2.10.1 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.6
+> ### (2025-08-06)
+> 
+> * Update balena-io/balena-cli to v22.2.2 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.5
+> ### (2025-08-06)
+> 
+> * Update balena-io/balena-cli to v22.2.1 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.4
+> ### (2025-08-05)
+> 
+> * Update balena-io/balena-cli to v22.2.0 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.3
+> ### (2025-08-04)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.5.51
+## (2025-08-15)
+
+* Updated contributing-device-support.md Part of https://balena.fibery.io/Work/Project/Update-Device-Support-Docs-1641 [Ryan]
+
+# v6.5.50
+## (2025-08-13)
+
+* wpa_supplicant: Enable SAE to support WPA3 personal [Michal Toman]
+
+# v6.5.49
+## (2025-08-11)
+
+* kernel-balena.bbclass: Remove references to disabling CONFIG_RTL8192CU [Florin Sarbu]
+
+# v6.5.48
+## (2025-08-02)
+
+
+<details>
+<summary> Update tests/leviathan digest to 9df0f9b [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.36.2
+> ### (2025-08-01)
+> 
+> * Core: sdk: Fix error handling on fetchOS function [Ryan Cooke]
+> 
+> ## leviathan-2.36.1
+> ### (2025-08-01)
+> 
+> * Update balena-io/balena-cli to v22.1.5 [balena-renovate[bot]]
+> 
+> ## leviathan-2.36.0
+> ### (2025-08-01)
+> 
+> * Core: worker: update flashing method to use native fetch API [Ryan Cooke]
+> 
+
+</details>
+
+# v6.5.47
+## (2025-07-29)
+
+
+<details>
+<summary> Update tests/leviathan digest to b33ddb7 [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.35.3
+> ### (2025-07-28)
+> 
+> * Bind mount private contracts in the core service [Kyle Harding]
+> 
+> ## leviathan-2.35.2
+> ### (2025-07-28)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.5.46
+## (2025-07-25)
+
+
+<details>
+<summary> Update tests/leviathan digest to 353d77d [balena-renovate[bot]] </summary>
+
+> ## leviathan-2.35.1
+> ### (2025-07-24)
+> 
+> * Ensure we always pass the BALENA_ARCH worker build arg [Kyle Harding]
+> 
+> ## leviathan-2.35.0
+> ### (2025-07-24)
+> 
+> * Core: worker: use polling to track flashing [Ryan Cooke]
+> 
+> ## leviathan-2.34.4
+> ### (2025-07-24)
+> 
+> * Update balena-io/balena-cli to v22.1.4 [balena-renovate[bot]]
+> 
+> ## leviathan-2.34.3
+> ### (2025-07-24)
+> 
+> * tests/e2e: switch to self hosted runners [Ryan Cooke]
+> 
+> ## leviathan-2.34.2
+> ### (2025-07-23)
+> 
+> * Update core/contracts digest to fc76558 [balena-renovate[bot]]
+> 
+> ## leviathan-2.34.1
+> ### (2025-07-23)
+> 
+> * Update balena-os/leviathan-worker to v2.10.0 [balena-renovate[bot]]
+> 
+> ## leviathan-2.34.0
+> ### (2025-07-22)
+> 
+> * Prefer image pull when running from GitHub Actions [Kyle Harding]
+> * Publish core and client docker images to ghcr.io [Kyle Harding]
+> 
+> ## leviathan-2.33.9
+> ### (2025-07-22)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.8
+> ### (Invalid date)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.7
+> ### (2025-06-23)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.6
+> ### (2025-06-23)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.5
+> ### (2025-06-19)
+> 
+> * Update docker/setup-buildx-action digest to e468171 [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.4
+> ### (2025-06-19)
+> 
+> * Update balena-io/balena-cli to v22.1.1 [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.3
+> ### (2025-06-16)
+> 
+> * Update balena-io/balena-cli to v22.1.0 [balena-renovate[bot]]
+> 
+> ## leviathan-2.33.2
+> ### (2025-06-16)
+> 
+> * Update Lock file maintenance [balena-renovate[bot]]
+> 
+
+</details>
+
+# v6.5.45
+## (2025-07-23)
+
+* grub-conf: Don't sign non-luks grub.cfg [Michal Toman]
+
 # v6.5.44
 ## (2025-07-09)
 
