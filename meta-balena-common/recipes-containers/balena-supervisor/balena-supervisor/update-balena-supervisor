@@ -131,6 +131,9 @@ else
     error_handler "no container engine detected"
 fi
 
+# shellcheck disable=SC1090
+. "/etc/${SVCONFIGDIR}/supervisor.conf"
+
 # Instead of api we use the direct URL to get the version
 if [ -z "$version" ] || [ "$version" = "null" ]; then
     info "Fetching version from direct URL..."
@@ -139,14 +142,14 @@ if [ -z "$version" ] || [ "$version" = "null" ]; then
         info "Got version $version from URL"
         if [[ "$SUPERVISOR_IMAGE" == *"supervisor-rpi3"* ]]; then
             image_name="dcnext/balena-supervisor-rpi3:${version}"
+        elif [[ "$SUPERVISOR_IMAGE" == *"supervisor-cm4"* ]]; then
+            image_name="dcnext/balena-supervisor-cm4:${version}"
         else
             image_name="dcnext/balena-supervisor:${version}"
         fi
     fi
 fi
 
-# shellcheck disable=SC1090
-. "/etc/${SVCONFIGDIR}/supervisor.conf"
 
 # If no API version is set, use preloaded values
 if [ -z "$version" ] || [ -z "$image_name" ] || [ "$version" = "null" ] || [ "$image_name" = "null" ]; then

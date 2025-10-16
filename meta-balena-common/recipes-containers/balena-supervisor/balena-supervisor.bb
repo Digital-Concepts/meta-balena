@@ -62,6 +62,8 @@ python () {
             d.setVar('SUPERVISOR_IMAGE', f"dcnext/balena-supervisor-rpi3:{version}")
         elif (d.getVar('MACHINE', True) == "raspberrypi4-64"):
             d.setVar('SUPERVISOR_IMAGE', f"dcnext/balena-supervisor:{version}")
+        elif (d.getVar('MACHINE', True) == "raspberrypicm4-ioboard"):
+            d.setVar('SUPERVISOR_IMAGE', f"dcnext/balena-supervisor-cm4:{version}")
         else:
             bb.fatal("balena-supervisor: Unknown architecture.")    
     except:
